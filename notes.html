@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>笔记 - 个人网站</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <h1>我的个人网站</h1>
+            <ul>
+                <li><a href="index.html">主页</a></li>
+                <li><a href="notes.html">笔记</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section class="notes-section">
+            <h2>我的笔记</h2>
+            
+            <div class="note-form">
+                <h3>添加新笔记</h3>
+                <input type="text" id="note-title" placeholder="笔记标题">
+                <textarea id="note-content" placeholder="笔记内容"></textarea>
+                <button onclick="addNote()">保存笔记</button>
+            </div>
+
+            <div class="notes-list">
+                <h3>笔记列表</h3>
+                <div id="notes-container">
+                    <p>暂无笔记</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 个人网站. 保留所有权利.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
