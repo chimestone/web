@@ -28,14 +28,28 @@
                     
                     <div class="notes-actions iUp">
                         <button id="add-note-btn" class="add-note-btn">添加新笔记</button>
+                        <button id="add-folder-btn" class="add-folder-btn">创建文件夹</button>
+                        <button id="upload-btn" class="upload-btn">上传Markdown</button>
+                        <input type="file" id="file-input" accept=".md,.markdown" style="display: none;">
                     </div>
                     
                     <div id="note-form" class="note-form iUp" style="display: none;">
+                        <select id="folder-select">
+                            <option value="">选择文件夹（可选）</option>
+                        </select>
                         <input type="text" id="note-title" placeholder="请输入笔记标题">
                         <textarea id="note-content" placeholder="请输入笔记内容"></textarea>
                         <div class="form-buttons">
                             <button id="save-note" class="save-btn">保存笔记</button>
                             <button id="cancel-note" class="cancel-btn">取消</button>
+                        </div>
+                    </div>
+                    
+                    <div id="folder-form" class="note-form iUp" style="display: none;">
+                        <input type="text" id="folder-name" placeholder="请输入文件夹名称">
+                        <div class="form-buttons">
+                            <button id="save-folder" class="save-btn">创建文件夹</button>
+                            <button id="cancel-folder" class="cancel-btn">取消</button>
                         </div>
                     </div>
 
@@ -61,6 +75,44 @@
     <style>
         .notes-actions {
             margin: 30px 0;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        .add-folder-btn, .upload-btn {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        .add-folder-btn:hover, .upload-btn:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.5);
+        }
+        .folder-header {
+            color: #4CAF50;
+            font-weight: bold;
+            margin: 20px 0 10px 0;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        #folder-select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 5px;
+            margin-bottom: 10px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1rem;
+        }
+        #folder-select option {
+            background: #333;
+            color: #fff;
         }
         .add-note-btn {
             background: rgba(255,255,255,0.2);
@@ -144,6 +196,17 @@
             border-radius: 3px;
             cursor: pointer;
             font-size: 0.8rem;
+        }
+        .git-link {
+            margin: 8px 0;
+        }
+        .git-link a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .git-link a:hover {
+            text-decoration: underline;
         }
     </style>
 </body>
