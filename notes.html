@@ -8,67 +8,142 @@
     <link rel="icon" href="assets/img/avatar.jpg">
 </head>
 <body>
-    <nav>
+    <nav class="top-nav">
         <div class="nav-container">
-            <h1>chime stone的个人网站</h1>
-            <ul>
-                <li><a href="index.html">主页</a></li>
-                <li><a href="notes.html">笔记</a></li>
-            </ul>
+            <a href="/" class="nav-link">首页</a>
+            <a href="notes.html" class="nav-link">笔记</a>
+            <a href="#" class="nav-link" onclick="event.preventDefault(); alert('关于页面建设中...');">关于</a>
+            <a href="https://github.com/chimestone/" class="nav-link" target="_blank">GitHub</a>
         </div>
     </nav>
+    <header id="panel" class="panel-cover">
+        <div class="panel-main">
+            <div class="panel-main__inner panel-inverted">
+                <div class="panel-main__content">
+                    <h1 class="panel-cover__title panel-title iUp">
+                        <a href="#" title="我的笔记">我的笔记</a>
+                    </h1>
+                    <p class="panel-cover__subtitle panel-subtitle iUp">记录生活的点点滴滴</p>
+                    <hr class="panel-cover__divider iUp" />
+                    
+                    <div class="notes-actions iUp">
+                        <button id="add-note-btn" class="add-note-btn">添加新笔记</button>
+                    </div>
+                    
+                    <div id="note-form" class="note-form iUp" style="display: none;">
+                        <input type="text" id="note-title" placeholder="请输入笔记标题">
+                        <textarea id="note-content" placeholder="请输入笔记内容"></textarea>
+                        <div class="form-buttons">
+                            <button id="save-note" class="save-btn">保存笔记</button>
+                            <button id="cancel-note" class="cancel-btn">取消</button>
+                        </div>
+                    </div>
 
-    <div class="notes-container">
-        <div class="notes-header iUp">
-            <h2>我的笔记</h2>
-            <button id="add-note-btn" class="add-note-btn">添加新笔记</button>
-        </div>
-        
-        <div id="note-form" class="note-form iUp">
-            <h3>添加新笔记</h3>
-            <input type="text" id="note-title" placeholder="请输入笔记标题">
-            <textarea id="note-content" placeholder="请输入笔记内容"></textarea>
-            <div class="form-buttons">
-                <button id="save-note" class="save-btn">保存笔记</button>
-                <button id="cancel-note" class="cancel-btn">取消</button>
+                    <div id="notes-list" class="notes-display iUp">
+                        <p style="text-align: center; color: rgba(255,255,255,0.8);">暂无笔记，点击上方按钮创建第一篇笔记</p>
+                    </div>
+                </div>
             </div>
+            <div class="panel-cover--overlay cover-slate"></div>
         </div>
-
-        <div id="notes-list" class="iUp">
-            <p style="text-align: center; color: #666;">暂无笔记，点击上方按钮创建第一篇笔记</p>
+        <div class="remark iUp">
+            <p class="power">Powered By 
+                <a href="https://github.com/features/actions" target="_blank"> GitHub Actions </a> And 
+                <a href="https://hitokoto.cn/" target="_blank"> Hitokoto </a>
+            </p>
         </div>
-    </div>
+    </header>
 
-    <footer>
-        <p>&copy; 2024 个人网站. 保留所有权利.</p>
-    </footer>
+
 
     <script src="assets/js/main.js"></script>
+    <script src="assets/json/images.json?cb=getBingImages"></script>
     <style>
-        .note-date {
-            color: #999;
-            font-size: 0.9rem;
+        .notes-actions {
+            margin: 30px 0;
+        }
+        .add-note-btn {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.5);
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .add-note-btn:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: #fff;
+        }
+        .note-form {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+        }
+        .note-form input, .note-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 5px;
             margin-bottom: 10px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1rem;
+        }
+        .note-form input::placeholder, .note-form textarea::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .save-btn, .cancel-btn {
+            padding: 8px 16px;
+            border: 1px solid rgba(255,255,255,0.5);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+        }
+        .notes-display {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        .note-card {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .note-card h4 {
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        .note-date {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.8rem;
+            margin-bottom: 8px;
         }
         .note-preview {
-            color: #666;
-            line-height: 1.5;
-            margin-bottom: 15px;
-        }
-        .note-actions {
-            text-align: right;
+            color: rgba(255,255,255,0.8);
+            line-height: 1.4;
+            margin-bottom: 10px;
         }
         .delete-btn {
-            background: #e74c3c;
+            background: rgba(231,76,60,0.8);
             color: white;
             border: none;
-            padding: 5px 12px;
+            padding: 4px 8px;
             border-radius: 3px;
             cursor: pointer;
-            font-size: 0.9rem;
-        }
-        .delete-btn:hover {
-            background: #c0392b;
+            font-size: 0.8rem;
         }
     </style>
 </body>
