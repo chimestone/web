@@ -158,6 +158,42 @@ class NotesManager {
     }
 }
 
+// Bing壁纸功能
+var BING_IMAGE_URL_PATTERN = /^\/th\?id=OHR\.[a-zA-Z0-9_\-]+\.jpg(&[a-zA-Z0-9=._\-]+)*$/;
+
+function getBingImages(imgUrls) {
+    var panel = document.querySelector('#panel');
+    if (!panel || !imgUrls || !Array.isArray(imgUrls) || imgUrls.length === 0) {
+        return;
+    }
+    
+    var indexName = "bing-image-index";
+    var index = parseInt(sessionStorage.getItem(indexName), 10);
+    var maxIndex = imgUrls.length - 1;
+    
+    if (isNaN(index) || index > maxIndex) {
+        index = 0;
+    } else {
+        index++;
+        if (index > maxIndex) {
+            index = 0;
+        }
+    }
+    
+    var imgUrl = imgUrls[index];
+    if (!imgUrl || typeof imgUrl !== 'string' || !imgUrl.match(BING_IMAGE_URL_PATTERN)) {
+        return;
+    }
+    
+    var url = "https://www.cn.bing.com" + imgUrl;
+    panel.style.backgroundImage = "url('" + url.replace(/['\\]/g, '\\$&') + "')";
+    panel.style.backgroundPosition = "center center";
+    panel.style.backgroundRepeat = "no-repeat";
+    panel.style.backgroundColor = "#666";
+    panel.style.backgroundSize = "cover";
+    sessionStorage.setItem(indexName, index);
+}
+
 // 一言API获取
 function loadHitokoto() {
     fetch("https://v1.hitokoto.cn")

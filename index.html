@@ -11,46 +11,79 @@
     <link rel="icon" href="assets/img/avatar.jpg">
 </head>
 <body>
-    <nav>
-        <div class="nav-container">
-            <h1>chime stone的个人网站</h1>
-            <ul>
-                <li><a href="index.html">主页</a></li>
-                <li><a href="notes.html">笔记</a></li>
-            </ul>
+    <header id="panel" class="panel-cover">
+        <div class="panel-main">
+            <div class="panel-main__inner panel-inverted">
+                <div class="panel-main__content">
+                    <div class="ih-item circle effect right_to_left">            
+                        <a href="#" title="" class="blog-button">
+                            <div class="img"><img src="assets/img/avatar.jpg" alt="img" class="js-avatar iUp profilepic"></div>
+                            <div class="info iUp">
+                                <div class="info-back">
+                                    <h2>Be Brave</h2>
+                                    <p>2025 · 勇敢</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <h1 class="panel-cover__title panel-title iUp">
+                        <a href="#" title="Chime Stone Home">Chime Stone</a>
+                    </h1>
+                    <p class="panel-cover__subtitle panel-subtitle iUp">practice makes perfect</p>
+                    <hr class="panel-cover__divider iUp" />
+                    <p id="description" class="panel-cover__description iUp">钟磬昼不响，空山自泠泠
+                        <br/>
+                        <strong>- 张元凯</strong>
+                    </p>
+                    <div class="navigation-wrapper iUp">
+                        <div>
+                            <nav class="cover-navigation cover-navigation--primary">
+                                <ul class="navigation">
+                                    <li class="navigation__item">
+                                        <a href="/" class="blog-button">首页</a>
+                                    </li>
+                                    <li class="navigation__item">
+                                        <a href="notes.html" class="blog-button">笔记</a>
+                                    </li>
+                                    <li class="navigation__item">
+                                        <a href="#" class="blog-button" onclick="event.preventDefault(); alert('关于页面建设中...');">关于</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                        <div class="iUp">
+                            <nav class="cover-navigation navigation--social">
+                                <ul class="navigation">
+                                    <li class="navigation__item">
+                                        <a href="https://github.com/chimestone/" title="github" target="_blank">
+                                            <span class="label">github</span>
+                                        </a>
+                                    </li>
+                                    <li class="navigation__item">
+                                        <a href="https://www.zhihu.com/people/钟磬/" title="zhihu" target="_blank">
+                                            <span class="label">zhihu</span>
+                                        </a>
+                                    </li>
+                                    <li class="navigation__item">
+                                        <a href="mailto:2424850182@qq.com" title="email">
+                                            <span class="label">email</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-cover--overlay cover-slate"></div>
         </div>
-    </nav>
-
-    <main>
-        <section class="hero iUp">
-            <div class="hero-avatar">
-                <img src="assets/img/avatar.jpg" alt="Chime Stone" style="width: 120px; height: 120px; border-radius: 50%; margin-bottom: 20px; border: 4px solid rgba(255,255,255,0.3);">
-            </div>
-            <h2>欢迎来到我的个人空间</h2>
-            <p id="description">钟磬昼不响，空山自泠泠<br><strong>- 张元凯</strong></p>
-            <div style="margin-top: 30px;">
-                <a href="https://github.com/chimestone/" target="_blank" style="color: white; text-decoration: none; margin: 0 15px; font-size: 1.1rem;">GitHub</a>
-                <a href="https://www.zhihu.com/people/钟磬/" target="_blank" style="color: white; text-decoration: none; margin: 0 15px; font-size: 1.1rem;">知乎</a>
-                <a href="mailto:2424850182@qq.com" style="color: white; text-decoration: none; margin: 0 15px; font-size: 1.1rem;">邮箱</a>
-            </div>
-        </section>
-
-        <section class="about iUp">
-            <h3>关于我</h3>
-            <p>记录和分享知识，practice makes perfect。<br>这里是我的个人空间，记录着学习和生活的点点滴滴。</p>
-        </section>
-
-        <section class="recent-notes iUp">
-            <h3>最近笔记</h3>
-            <div id="recent-notes-list">
-                <p>暂无笔记，<a href="notes.html">去创建第一篇笔记</a></p>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2024 个人网站. 保留所有权利.</p>
-    </footer>
+        <div class="remark iUp">
+            <p class="power">Powered By 
+                <a href="https://github.com/features/actions" target="_blank"> GitHub Actions </a> And 
+                <a href="https://hitokoto.cn/" target="_blank"> Hitokoto </a>
+            </p>
+        </div>
+    </header>
 
     <script src="assets/js/main.js"></script>
     <script src="assets/json/images.json?cb=getBingImages"></script>
