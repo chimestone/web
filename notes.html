@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>笔记 - 个人网站</title>
-    <link rel="stylesheet" href="style.css">
+    <title>笔记 - Chime Stone</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="icon" href="assets/img/avatar.jpg">
 </head>
 <body>
     <nav>
         <div class="nav-container">
-            <h1>我的个人网站</h1>
+            <h1>chime stone的个人网站</h1>
             <ul>
                 <li><a href="index.html">主页</a></li>
                 <li><a href="notes.html">笔记</a></li>
@@ -17,30 +18,58 @@
         </div>
     </nav>
 
-    <main>
-        <section class="notes-section">
+    <div class="notes-container">
+        <div class="notes-header iUp">
             <h2>我的笔记</h2>
-            
-            <div class="note-form">
-                <h3>添加新笔记</h3>
-                <input type="text" id="note-title" placeholder="笔记标题">
-                <textarea id="note-content" placeholder="笔记内容"></textarea>
-                <button onclick="addNote()">保存笔记</button>
+            <button id="add-note-btn" class="add-note-btn">添加新笔记</button>
+        </div>
+        
+        <div id="note-form" class="note-form iUp">
+            <h3>添加新笔记</h3>
+            <input type="text" id="note-title" placeholder="请输入笔记标题">
+            <textarea id="note-content" placeholder="请输入笔记内容"></textarea>
+            <div class="form-buttons">
+                <button id="save-note" class="save-btn">保存笔记</button>
+                <button id="cancel-note" class="cancel-btn">取消</button>
             </div>
+        </div>
 
-            <div class="notes-list">
-                <h3>笔记列表</h3>
-                <div id="notes-container">
-                    <p>暂无笔记</p>
-                </div>
-            </div>
-        </section>
-    </main>
+        <div id="notes-list" class="iUp">
+            <p style="text-align: center; color: #666;">暂无笔记，点击上方按钮创建第一篇笔记</p>
+        </div>
+    </div>
 
     <footer>
         <p>&copy; 2024 个人网站. 保留所有权利.</p>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="assets/js/main.js"></script>
+    <style>
+        .note-date {
+            color: #999;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        .note-preview {
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        .note-actions {
+            text-align: right;
+        }
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+    </style>
 </body>
 </html>

@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>chime stone</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="description" content="Chime Stone 个人网站">
+    <meta name="keywords" content="Chime Stone,个人网站,笔记">
+    <meta name="author" content="Chime Stone">
+    <title>Chime Stone - 个人网站</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="icon" href="assets/img/avatar.jpg">
 </head>
 <body>
     <nav>
@@ -18,17 +22,25 @@
     </nav>
 
     <main>
-        <section class="hero">
+        <section class="hero iUp">
+            <div class="hero-avatar">
+                <img src="assets/img/avatar.jpg" alt="Chime Stone" style="width: 120px; height: 120px; border-radius: 50%; margin-bottom: 20px; border: 4px solid rgba(255,255,255,0.3);">
+            </div>
             <h2>欢迎来到我的个人空间</h2>
-            <p>这里记录着我的学习和生活</p>
+            <p id="description">钟磬昼不响，空山自泠泠<br><strong>- 张元凯</strong></p>
+            <div style="margin-top: 30px;">
+                <a href="https://github.com/chimestone/" target="_blank" style="color: white; text-decoration: none; margin: 0 15px; font-size: 1.1rem;">GitHub</a>
+                <a href="https://www.zhihu.com/people/钟磬/" target="_blank" style="color: white; text-decoration: none; margin: 0 15px; font-size: 1.1rem;">知乎</a>
+                <a href="mailto:2424850182@qq.com" style="color: white; text-decoration: none; margin: 0 15px; font-size: 1.1rem;">邮箱</a>
+            </div>
         </section>
 
-        <section class="about">
+        <section class="about iUp">
             <h3>关于我</h3>
-            <p>记录和分享知识。</p>
+            <p>记录和分享知识，practice makes perfect。<br>这里是我的个人空间，记录着学习和生活的点点滴滴。</p>
         </section>
 
-        <section class="recent-notes">
+        <section class="recent-notes iUp">
             <h3>最近笔记</h3>
             <div id="recent-notes-list">
                 <p>暂无笔记，<a href="notes.html">去创建第一篇笔记</a></p>
@@ -40,6 +52,7 @@
         <p>&copy; 2024 个人网站. 保留所有权利.</p>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/json/images.json?cb=getBingImages"></script>
 </body>
 </html>
