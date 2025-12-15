@@ -7,17 +7,108 @@
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="icon" href="assets/img/avatar.jpg">
     <style>
+        /* 强制覆盖main.css中阻止滚动的样式 */
+        html {
+            height: auto !important;
+            max-height: none !important;
+            overflow: auto !important;
+        }
+        body {
+            height: auto !important;
+            overflow: auto !important;
+        }
+        .panel-cover {
+            position: relative !important;
+            height: auto !important;
+            min-height: 100vh !important;
+        }
+        .panel {
+            height: auto !important;
+            display: block !important;
+        }
+        .panel-main {
+            height: auto !important;
+            display: block !important;
+        }
+        .panel-main__inner {
+            display: block !important;
+            vertical-align: top !important;
+        }
+        .panel-main__content {
+            height: auto !important;
+            overflow: visible !important;
+            max-width: none !important;
+        }
+        
         .note-detail {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 30px;
             background: rgba(255,255,255,0.1);
             border-radius: 10px;
             backdrop-filter: blur(10px);
+            min-height: 400px;
+            margin-bottom: 100px;
         }
         .note-content {
             color: #fff;
-            line-height: 1.6;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+        .note-content h1, .note-content h2, .note-content h3 {
+            color: #fff;
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+        }
+        .note-content h1 {
+            font-size: 2rem;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding-bottom: 0.3em;
+        }
+        .note-content h2 {
+            font-size: 1.5rem;
+        }
+        .note-content h3 {
+            font-size: 1.2rem;
+        }
+        .note-content p {
+            margin-bottom: 1em;
+        }
+        .note-content code {
+            background: rgba(0,0,0,0.3);
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #ffeb3b;
+            font-family: 'Courier New', monospace;
+        }
+        .note-content pre {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 1em 0;
+        }
+        .note-content pre code {
+            background: none;
+            padding: 0;
+        }
+        .note-content blockquote {
+            border-left: 4px solid #ffeb3b;
+            padding-left: 15px;
+            margin: 1em 0;
+            font-style: italic;
+            background: rgba(255,235,59,0.1);
+            padding: 10px 15px;
+            border-radius: 0 5px 5px 0;
+        }
+        .note-content ul, .note-content ol {
+            margin: 1em 0;
+            padding-left: 2em;
+        }
+        .note-content li {
+            margin-bottom: 0.5em;
         }
         .back-btn {
             background: rgba(255,255,255,0.2);
@@ -29,6 +120,11 @@
             text-decoration: none;
             display: inline-block;
             margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: #fff;
         }
     </style>
 </head>
@@ -48,14 +144,21 @@
                     <a href="notes.html" class="back-btn">← 返回笔记列表</a>
                     <div class="note-detail">
                         <div id="note-content" class="note-content">
-                            <!-- 笔记内容将在这里动态加载 -->
+                            <p style="text-align: center; color: rgba(255,255,255,0.8);">正在加载笔记内容...</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="panel-cover--overlay cover-slate"></div>
         </div>
+        <div class="remark iUp">
+            <p class="power">Powered By 
+                <a href="https://github.com/features/actions" target="_blank"> GitHub Actions </a> And 
+                <a href="https://hitokoto.cn/" target="_blank"> Hitokoto </a>
+            </p>
+        </div>
     </header>
+    
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="assets/js/main.js"></script>
     <script src="assets/json/images.json?cb=getBingImages"></script>
@@ -63,19 +166,34 @@
         // 获取URL参数中的笔记ID并加载内容
         const urlParams = new URLSearchParams(window.location.search);
         const noteId = urlParams.get('id');
-        if (noteId) {
-            loadNoteContent(noteId);
-        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            if (noteId) {
+                loadNoteContent(noteId);
+            } else {
+                document.getElementById('note-content').innerHTML = '<p style="color: #ff6b6b;">未找到笔记ID</p>';
+            }
+        });
         
         function loadNoteContent(noteId) {
-            // 从localStorage获取笔记内容
-            const notes = JSON.parse(localStorage.getItem('notes') || '[]');
-            const note = notes.find(n => n.id === noteId);
-            if (note) {
-                document.title = `${note.title} - Chime Stone`;
-                document.getElementById('note-content').innerHTML = marked.parse(note.content);
-            } else {
-                document.getElementById('note-content').innerHTML = '<p>笔记不存在</p>';
+            try {
+                // 从localStorage获取笔记内容
+                const notes = JSON.parse(localStorage.getItem('notes') || '[]');
+                const note = notes.find(n => n.id === noteId);
+                
+                if (note) {
+                    // 更新页面标题
+                    document.title = `${note.title} - Chime Stone`;
+                    
+                    // 渲染markdown内容
+                    const htmlContent = marked.parse(note.content);
+                    document.getElementById('note-content').innerHTML = htmlContent;
+                } else {
+                    document.getElementById('note-content').innerHTML = '<p style="color: #ff6b6b;">笔记不存在或已被删除</p>';
+                }
+            } catch (error) {
+                console.error('加载笔记失败:', error);
+                document.getElementById('note-content').innerHTML = '<p style="color: #ff6b6b;">加载笔记时出现错误</p>';
             }
         }
     </script>
