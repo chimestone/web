@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>笔记详情 - Chime Stone</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="icon" href="assets/img/avatar.jpg">
+    <style>
+        .note-detail {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        .note-content {
+            color: #fff;
+            line-height: 1.6;
+        }
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.5);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-link">首页</a>
+            <a href="notes.html" class="nav-link">笔记</a>
+            <a href="#" class="nav-link" onclick="event.preventDefault(); alert('关于页面建设中...');">关于</a>
+            <a href="https://github.com/chimestone/" class="nav-link" target="_blank">GitHub</a>
+        </div>
+    </nav>
+    <header id="panel" class="panel-cover">
+        <div class="panel-main">
+            <div class="panel-main__inner panel-inverted">
+                <div class="panel-main__content">
+                    <a href="notes.html" class="back-btn">← 返回笔记列表</a>
+                    <div class="note-detail">
+                        <div id="note-content" class="note-content">
+                            <!-- 笔记内容将在这里动态加载 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-cover--overlay cover-slate"></div>
+        </div>
+    </header>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/json/images.json?cb=getBingImages"></script>
+    <script>
+        // 获取URL参数中的笔记ID并加载内容
+        const urlParams = new URLSearchParams(window.location.search);
+        const noteId = urlParams.get('id');
+        if (noteId) {
+            loadNoteContent(noteId);
+        }
+        
+        function loadNoteContent(noteId) {
+            // 从localStorage获取笔记内容
+            const notes = JSON.parse(localStorage.getItem('notes') || '[]');
+            const note = notes.find(n => n.id === noteId);
+            if (note) {
+                document.title = `${note.title} - Chime Stone`;
+                document.getElementById('note-content').innerHTML = marked.parse(note.content);
+            } else {
+                document.getElementById('note-content').innerHTML = '<p>笔记不存在</p>';
+            }
+        }
+    </script>
+</body>
+</html>
