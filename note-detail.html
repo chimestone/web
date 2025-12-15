@@ -39,6 +39,8 @@
         </div>
     </header>
     
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="assets/js/main.js"></script>
     <script src="assets/json/images.json?cb=getBingImages"></script>
@@ -55,6 +57,29 @@
             }
         });
         
+        // 数学公式渲染函数
+        function renderMath(content) {
+            // 处理块级公式 $$...$$
+            content = content.replace(/\$\$([^$]+)\$\$/g, (match, formula) => {
+                try {
+                    return katex.renderToString(formula.trim(), { displayMode: true });
+                } catch (e) {
+                    return `<span style="color: #ff6b6b;">[Math Error: ${e.message}]</span>`;
+                }
+            });
+            
+            // 处理行内公式 $...$
+            content = content.replace(/\$([^$]+)\$/g, (match, formula) => {
+                try {
+                    return katex.renderToString(formula.trim(), { displayMode: false });
+                } catch (e) {
+                    return `<span style="color: #ff6b6b;">[Math Error: ${e.message}]</span>`;
+                }
+            });
+            
+            return content;
+        }
+        
         function loadNoteContent(noteId) {
             try {
                 // 从localStorage获取笔记内容
@@ -65,8 +90,9 @@
                     // 更新页面标题
                     document.title = `${note.title} - Chime Stone`;
                     
-                    // 渲染markdown内容
-                    const htmlContent = marked.parse(note.content);
+                    // 先渲染数学公式，再渲染markdown
+                    const mathRendered = renderMath(note.content);
+                    const htmlContent = marked.parse(mathRendered);
                     document.getElementById('note-content').innerHTML = htmlContent;
                 } else {
                     document.getElementById('note-content').innerHTML = '<p style="color: #ff6b6b;">笔记不存在或已被删除</p>';
