@@ -1,0 +1,181 @@
+/* 笔记页面专用样式 */
+
+/* 强制覆盖main.css中阻止滚动的样式 */
+html {
+    height: auto !important;
+    max-height: none !important;
+    overflow: auto !important;
+}
+body {
+    height: auto !important;
+    overflow: auto !important;
+}
+.panel-cover {
+    position: relative !important;
+    height: auto !important;
+    min-height: 100vh !important;
+}
+.panel {
+    height: auto !important;
+    display: block !important;
+}
+.panel-main {
+    height: auto !important;
+    display: block !important;
+}
+.panel-main__inner {
+    display: block !important;
+    vertical-align: top !important;
+}
+.panel-main__content {
+    height: auto !important;
+    overflow: visible !important;
+    max-width: none !important;
+}
+
+/* 笔记操作按钮 */
+.notes-actions {
+    margin: 30px 0;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+.add-note-btn {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.5);
+    padding: 12px 24px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+.add-note-btn:hover {
+    background: rgba(255,255,255,0.3);
+    border-color: #fff;
+}
+
+/* 笔记表单 */
+.note-form {
+    background: rgba(255,255,255,0.1);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    backdrop-filter: blur(10px);
+}
+.note-form input, .note-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    font-size: 1rem;
+}
+.note-form input::placeholder, .note-form textarea::placeholder {
+    color: rgba(255,255,255,0.7);
+}
+.form-buttons {
+    display: flex;
+    gap: 10px;
+}
+.save-btn, .cancel-btn {
+    padding: 8px 16px;
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9em;
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+}
+
+/* 便利贴展示区域 */
+.notes-display {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+    padding: 20px 0 100px 0;
+    overflow: visible;
+}
+
+/* 便利贴样式 */
+.sticky-note {
+    width: 220px;
+    height: 220px;
+    background: linear-gradient(135deg, #ffeb3b, #fff176);
+    color: #333;
+    padding: 20px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transform: rotate(-2deg);
+    font-family: 'Microsoft YaHei', sans-serif;
+    border: none;
+    margin: 10px;
+}
+
+.sticky-note:nth-child(1) {
+    background: linear-gradient(135deg, #ffeb3b, #fff176);
+    transform: rotate(-2deg);
+}
+.sticky-note:nth-child(2) {
+    background: linear-gradient(135deg, #81c784, #a5d6a7);
+    transform: rotate(1deg);
+}
+.sticky-note:nth-child(3) {
+    background: linear-gradient(135deg, #64b5f6, #90caf9);
+    transform: rotate(-1deg);
+}
+.sticky-note:nth-child(4) {
+    background: linear-gradient(135deg, #ffb74d, #ffcc02);
+    transform: rotate(2deg);
+}
+.sticky-note:nth-child(5) {
+    background: linear-gradient(135deg, #f06292, #f8bbd9);
+    transform: rotate(-3deg);
+}
+.sticky-note:nth-child(6) {
+    background: linear-gradient(135deg, #ba68c8, #ce93d8);
+    transform: rotate(1.5deg);
+}
+
+.sticky-note:hover {
+    transform: scale(1.1) rotate(0deg);
+    z-index: 10;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+}
+
+.sticky-note::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-left: 25px solid transparent;
+    border-top: 25px solid rgba(0,0,0,0.1);
+}
+
+.note-title {
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: #333;
+    line-height: 1.2;
+    word-wrap: break-word;
+}
+
+.note-h1 {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+    word-wrap: break-word;
+}
