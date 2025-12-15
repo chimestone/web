@@ -70,11 +70,12 @@
             }
             
             notesList.innerHTML = notes.map((note, index) => {
-                const firstH1 = extractFirstH1(note.content);
+                const h1s = extractH1s(note.content);
                 return `
                     <div class="sticky-note" onclick="openNoteDetail('${note.id}')">
                         <div class="note-title">${escapeHtml(note.title)}</div>
-                        <div class="note-h1">${escapeHtml(firstH1)}</div>
+                        <div class="note-lines"></div>
+                        <div class="note-h1">${escapeHtml(h1s)}</div>
                     </div>
                 `;
             }).join('');
@@ -87,10 +88,34 @@
             return div.innerHTML;
         }
         
-        // 提取markdown中的第一个一级标题
-        function extractFirstH1(content) {
-            const h1Match = content.match(/^#\s+(.+)$/m);
-            return h1Match ? h1Match[1] : '暂无一级标题';
+        // 提取markdown中的多个一级标题，智能控制行数
+        function extractH1s(content) {
+            const h1Matches = content.match(/^#\s+(.+)$/gm);
+            if (!h1Matches) return '暂无一级标题';
+            
+            const h1s = h1Matches.map(match => match.replace(/^#\s+/, ''));
+            const maxLines = 5; // 便利贴最多显示5行
+            let result = [];
+            let currentLines = 0;
+            
+            for (let i = 0; i < h1s.length; i++) {
+                const title = h1s[i];
+                // 估算标题占用的行数（每行约15个字符）
+                const titleLines = Math.ceil(title.length / 15);
+                
+                if (currentLines + titleLines <= maxLines) {
+                    result.push(title);
+                    currentLines += titleLines;
+                } else {
+                    // 如果还有更多标题，添加省略号
+                    if (i < h1s.length - 1 || currentLines + titleLines > maxLines) {
+                        result.push('...');
+                    }
+                    break;
+                }
+            }
+            
+            return result.join('\n');
         }
         
         // 打开笔记详情页
