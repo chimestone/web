@@ -1,5 +1,10 @@
 /* 笔记页面专用样式 */
 
+/* 修复导航栏遮挡问题 */
+body {
+    padding-top: 70px !important;
+}
+
 /* 强制覆盖main.css中阻止滚动的样式 */
 html {
     height: auto !important;
@@ -207,4 +212,92 @@ body {
     margin-top: 5px;
     height: 120px;
     max-height: 120px;
+}
+
+/* 文件上传功能样式 */
+.upload-tabs {
+    display: flex;
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+}
+
+.tab-btn {
+    background: transparent;
+    color: rgba(255,255,255,0.7);
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+    color: #fff;
+    border-bottom-color: #fff;
+}
+
+.tab-btn:hover {
+    color: #fff;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.file-upload-area {
+    margin-top: 10px;
+}
+
+.upload-zone {
+    border: 2px dashed rgba(255,255,255,0.5);
+    border-radius: 8px;
+    padding: 40px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(255,255,255,0.05);
+}
+
+.upload-zone:hover {
+    border-color: #fff;
+    background: rgba(255,255,255,0.1);
+}
+
+.upload-zone p {
+    margin: 5px 0;
+    color: rgba(255,255,255,0.9);
+}
+
+.file-info {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.6) !important;
+}
+
+.file-selected {
+    background: rgba(76, 175, 80, 0.2);
+    border-color: #4caf50;
+}
+
+.file-selected p {
+    color: #4caf50 !important;
+}
+
+#upload-title {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    font-size: 1rem;
+}
+
+#upload-title::placeholder {
+    color: rgba(255,255,255,0.7);
 }

@@ -32,8 +32,27 @@
                     </div>
                     
                     <div id="note-form" class="note-form iUp" style="display: none;">
-                        <input type="text" id="note-title" placeholder="请输入笔记标题">
-                        <textarea id="note-content" placeholder="请输入笔记内容（支持Markdown格式）" rows="6"></textarea>
+                        <div class="upload-tabs">
+                            <button type="button" class="tab-btn active" onclick="switchTab('input')">手动输入</button>
+                            <button type="button" class="tab-btn" onclick="switchTab('upload')">上传文件</button>
+                        </div>
+                        
+                        <div id="input-tab" class="tab-content active">
+                            <input type="text" id="note-title" placeholder="请输入笔记标题">
+                            <textarea id="note-content" placeholder="请输入笔记内容（支持Markdown格式）" rows="6"></textarea>
+                        </div>
+                        
+                        <div id="upload-tab" class="tab-content">
+                            <input type="text" id="upload-title" placeholder="请输入笔记标题（可选，将使用文件名）">
+                            <div class="file-upload-area">
+                                <input type="file" id="markdown-file" accept=".md,.markdown,.txt" style="display: none;">
+                                <div class="upload-zone" onclick="document.getElementById('markdown-file').click()">
+                                    <p>点击选择Markdown文件</p>
+                                    <p class="file-info">支持 .md, .markdown, .txt 格式</p>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <div class="form-buttons">
                             <button id="save-note" class="save-btn">保存笔记</button>
                             <button id="cancel-note" class="cancel-btn">取消</button>
@@ -124,10 +143,61 @@
             window.location.href = `note-detail.html?id=${noteId}`;
         }
         
-        // 保存笔记
+
+        
+        // 标签切换功能
+        function switchTab(tabName) {
+            // 切换标签按钮状态
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // 切换内容区域
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(tabName + '-tab').classList.add('active');
+        }
+        
+        // 文件上传处理
+        function handleFileUpload() {
+            const fileInput = document.getElementById('markdown-file');
+            const uploadZone = document.querySelector('.upload-zone');
+            const uploadTitle = document.getElementById('upload-title');
+            
+            fileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    uploadZone.classList.add('file-selected');
+                    uploadZone.innerHTML = `
+                        <p>已选择文件: ${file.name}</p>
+                        <p class="file-info">点击重新选择</p>
+                    `;
+                    
+                    // 如果没有输入标题，使用文件名
+                    if (!uploadTitle.value.trim()) {
+                        uploadTitle.value = file.name.replace(/\.[^/.]+$/, '');
+                    }
+                    
+                    // 读取文件内容
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('note-content').value = e.target.result;
+                    };
+                    reader.readAsText(file);
+                }
+            });
+        }
+        
+        // 修改保存笔记功能
         function saveNote() {
-            const title = document.getElementById('note-title').value.trim();
-            const content = document.getElementById('note-content').value.trim();
+            const activeTab = document.querySelector('.tab-content.active').id;
+            let title, content;
+            
+            if (activeTab === 'input-tab') {
+                title = document.getElementById('note-title').value.trim();
+                content = document.getElementById('note-content').value.trim();
+            } else {
+                title = document.getElementById('upload-title').value.trim() || document.getElementById('note-title').value.trim();
+                content = document.getElementById('note-content').value.trim();
+            }
             
             if (!title || !content) {
                 alert('请填写标题和内容');
@@ -147,6 +217,13 @@
             // 清空表单并隐藏
             document.getElementById('note-title').value = '';
             document.getElementById('note-content').value = '';
+            document.getElementById('upload-title').value = '';
+            document.getElementById('markdown-file').value = '';
+            document.querySelector('.upload-zone').classList.remove('file-selected');
+            document.querySelector('.upload-zone').innerHTML = `
+                <p>点击选择Markdown文件</p>
+                <p class="file-info">支持 .md, .markdown, .txt 格式</p>
+            `;
             document.getElementById('note-form').style.display = 'none';
             
             renderStickyNotes();
@@ -163,6 +240,9 @@
             });
             
             document.getElementById('save-note').addEventListener('click', saveNote);
+            
+            // 初始化文件上传功能
+            handleFileUpload();
             
             // 页面加载时渲染便利贴
             renderStickyNotes();
