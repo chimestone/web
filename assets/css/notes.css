@@ -1,10 +1,5 @@
 /* 笔记页面专用样式 */
 
-/* 修复导航栏遮挡问题 */
-body {
-    padding-top: 70px !important;
-}
-
 /* 强制覆盖main.css中阻止滚动的样式 */
 html {
     height: auto !important;
@@ -36,6 +31,7 @@ body {
     height: auto !important;
     overflow: visible !important;
     max-width: none !important;
+    padding-top: 100px !important;
 }
 
 /* 笔记操作按钮 */
