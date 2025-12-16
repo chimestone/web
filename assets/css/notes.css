@@ -93,12 +93,10 @@ body {
 
 /* 便利贴展示区域 */
 .notes-display {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 25px;
     margin-top: 30px;
     padding: 20px 0 100px 0;
     overflow: visible;
+    position: relative;
 }
 
 /* 便利贴样式 */
@@ -310,4 +308,90 @@ body {
     padding: 2px 6px;
     border-radius: 3px;
     font-family: 'Courier New', monospace;
+}
+
+/* 文件夹分组样式 */
+.folder-section {
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.folder-title {
+    color: rgba(255,255,255,0.9);
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: normal;
+}
+
+.notes-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 25px;
+    position: relative;
+}
+
+/* 便利贴容器（包含大头针） */
+.sticky-note-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 大头针样式 */
+.pushpin {
+    width: 20px;
+    height: 20px;
+    background: var(--pin-color, #ff6b6b);
+    border-radius: 50% 50% 50% 0;
+    position: relative;
+    margin-bottom: 10px;
+    transform: rotate(-45deg);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    z-index: 10;
+}
+
+.pushpin::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 6px;
+    height: 6px;
+    background: rgba(255,255,255,0.8);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.pushpin::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2px;
+    height: 8px;
+    background: rgba(0,0,0,0.3);
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+/* 连接线样式 */
+.connecting-line {
+    position: absolute;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* 便利贴调整 */
+.sticky-note-container .sticky-note {
+    margin: 0;
+}
+
+/* 根目录文件夹特殊样式 */
+.root-folder .folder-title {
+    display: none;
+}
+
+.root-folder .sticky-note-container {
+    margin-top: 0;
 }

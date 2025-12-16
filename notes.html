@@ -52,28 +52,37 @@
         // 笔记管理功能
         let notes = [];
         
-        // 从GitHub读取笔记列表
+        // 从GitHub读取笔记列表（支持文件夹）
         async function loadNotesFromGitHub() {
             try {
-                const response = await fetch('https://api.github.com/repos/chimestone/web/contents/notes');
-                const files = await response.json();
-                
                 notes = [];
-                for (const file of files) {
-                    if (file.name.endsWith('.md')) {
-                        const content = await fetchMarkdownContent(file.download_url);
-                        notes.push({
-                            id: file.name.replace('.md', ''),
-                            title: file.name.replace('.md', ''),
-                            content: content,
-                            filename: file.name
-                        });
-                    }
-                }
+                await loadNotesRecursively('notes', '');
                 renderStickyNotes();
             } catch (error) {
                 console.error('加载笔记失败:', error);
                 document.getElementById('notes-list').innerHTML = '<p style="text-align: center; color: rgba(255,255,255,0.8);">加载笔记失败，请检查网络连接</p>';
+            }
+        }
+        
+        // 递归加载文件夹内容
+        async function loadNotesRecursively(path, folder) {
+            const response = await fetch(`https://api.github.com/repos/chimestone/web/contents/${path}`);
+            const items = await response.json();
+            
+            for (const item of items) {
+                if (item.type === 'file' && item.name.endsWith('.md')) {
+                    const content = await fetchMarkdownContent(item.download_url);
+                    notes.push({
+                        id: `${folder}${item.name}`.replace('.md', ''),
+                        title: item.name.replace('.md', ''),
+                        content: content,
+                        filename: item.name,
+                        folder: folder,
+                        path: item.path
+                    });
+                } else if (item.type === 'dir') {
+                    await loadNotesRecursively(item.path, item.name + '/');
+                }
             }
         }
         
@@ -83,7 +92,7 @@
             return await response.text();
         }
         
-        // 渲染便利贴
+        // 渲染便利贴（支持文件夹分组）
         function renderStickyNotes() {
             const notesList = document.getElementById('notes-list');
             if (notes.length === 0) {
@@ -91,16 +100,130 @@
                 return;
             }
             
-            notesList.innerHTML = notes.map((note, index) => {
-                const h1s = extractH1s(note.content);
-                return `
-                    <div class="sticky-note" onclick="openNoteDetail('${note.id}')">
-                        <div class="note-title">${escapeHtml(note.title)}</div>
-                        <div class="note-lines"></div>
-                        <div class="note-h1">${escapeHtml(h1s)}</div>
-                    </div>
-                `;
-            }).join('');
+            // 按文件夹分组
+            const groupedNotes = groupNotesByFolder();
+            let html = '';
+            
+            Object.keys(groupedNotes).forEach((folder, folderIndex) => {
+                const folderNotes = groupedNotes[folder];
+                const folderColor = getFolderColor(folderIndex);
+                
+                if (folder) {
+                    html += `<div class="folder-section" data-folder="${folder}">`;
+                    html += `<h3 class="folder-title">📁 ${folder.replace('/', '')}</h3>`;
+                } else {
+                    html += `<div class="folder-section root-folder">`;
+                }
+                
+                html += '<div class="notes-group">';
+                
+                folderNotes.forEach((note, noteIndex) => {
+                    const h1s = extractH1s(note.content);
+                    const hasPushpin = folder !== ''; // 根目录文件无大头针
+                    
+                    html += `
+                        <div class="sticky-note-container" data-folder="${folder}" data-note-index="${noteIndex}">
+                            ${hasPushpin ? `<div class="pushpin" style="--pin-color: ${folderColor}"></div>` : ''}
+                            <div class="sticky-note" onclick="openNoteDetail('${note.id}')">
+                                <div class="note-title">${escapeHtml(note.title)}</div>
+                                <div class="note-lines"></div>
+                                <div class="note-h1">${escapeHtml(h1s)}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += '</div></div>';
+            });
+            
+            notesList.innerHTML = html;
+            
+            // 渲染连接线
+            setTimeout(() => drawConnectingLines(), 100);
+        }
+        
+        // 按文件夹分组
+        function groupNotesByFolder() {
+            const grouped = {};
+            notes.forEach(note => {
+                const folder = note.folder || '';
+                if (!grouped[folder]) {
+                    grouped[folder] = [];
+                }
+                grouped[folder].push(note);
+            });
+            return grouped;
+        }
+        
+        // 获取文件夹颜色
+        function getFolderColor(index) {
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff'];
+            return colors[index % colors.length];
+        }
+        
+        // 绘制连接线
+        function drawConnectingLines() {
+            // 清除旧的连接线
+            document.querySelectorAll('.connecting-line').forEach(line => line.remove());
+            
+            // 为每个文件夹绘制连接线
+            document.querySelectorAll('.folder-section').forEach(section => {
+                const folder = section.dataset.folder;
+                if (!folder) return; // 跳过根目录
+                
+                const pushpins = section.querySelectorAll('.pushpin');
+                if (pushpins.length < 2) return; // 少于2个不需要连线
+                
+                const folderIndex = Array.from(document.querySelectorAll('.folder-section')).indexOf(section);
+                const color = getFolderColor(folderIndex);
+                
+                for (let i = 0; i < pushpins.length - 1; i++) {
+                    drawLineBetweenPushpins(pushpins[i], pushpins[i + 1], color);
+                }
+            });
+        }
+        
+        // 在两个大头针之间绘线
+        function drawLineBetweenPushpins(pin1, pin2, color) {
+            const rect1 = pin1.getBoundingClientRect();
+            const rect2 = pin2.getBoundingClientRect();
+            const container = document.getElementById('notes-list');
+            const containerRect = container.getBoundingClientRect();
+            
+            const x1 = rect1.left + rect1.width / 2 - containerRect.left;
+            const y1 = rect1.top + rect1.height / 2 - containerRect.top;
+            const x2 = rect2.left + rect2.width / 2 - containerRect.left;
+            const y2 = rect2.top + rect2.height / 2 - containerRect.top;
+            
+            const line = document.createElement('div');
+            line.className = 'connecting-line';
+            line.style.cssText = `
+                position: absolute;
+                left: ${Math.min(x1, x2)}px;
+                top: ${Math.min(y1, y2)}px;
+                width: ${Math.abs(x2 - x1)}px;
+                height: ${Math.abs(y2 - y1)}px;
+                pointer-events: none;
+                z-index: 1;
+            `;
+            
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.style.cssText = 'width: 100%; height: 100%;';
+            
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            const startX = x1 < x2 ? 0 : Math.abs(x2 - x1);
+            const startY = y1 < y2 ? 0 : Math.abs(y2 - y1);
+            const endX = x1 < x2 ? Math.abs(x2 - x1) : 0;
+            const endY = y1 < y2 ? Math.abs(y2 - y1) : 0;
+            
+            path.setAttribute('d', `M ${startX} ${startY} L ${endX} ${endY}`);
+            path.setAttribute('stroke', color);
+            path.setAttribute('stroke-width', '2');
+            path.setAttribute('stroke-dasharray', '5,5');
+            
+            svg.appendChild(path);
+            line.appendChild(svg);
+            container.appendChild(line);
         }
         
         // HTML转义函数
@@ -154,6 +277,11 @@
         document.addEventListener('DOMContentLoaded', function() {
             // 页面加载时从 GitHub 加载笔记
             loadNotesFromGitHub();
+        });
+        
+        // 窗口大小变化时重绘连接线
+        window.addEventListener('resize', () => {
+            setTimeout(() => drawConnectingLines(), 100);
         });
     </script>
 </body>
