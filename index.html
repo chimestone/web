@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Chime Stone 个人网站">
-    <meta name="keywords" content="Chime Stone,个人网站,笔记">
+    <meta name="keywords" content="Chime Stone,个人网站">
     <meta name="author" content="Chime Stone">
     <title>Chime Stone - 个人网站</title>
     <link rel="stylesheet" href="assets/css/main.css">
@@ -14,8 +14,6 @@
     <nav class="top-nav">
         <div class="nav-container">
             <a href="index.html" class="nav-link">首页</a>
-            <a href="notes.html" class="nav-link">笔记</a>
-            <a href="#" class="nav-link" onclick="event.preventDefault(); alert('关于页面建设中...');">关于</a>
             <a href="https://github.com/chimestone/" class="nav-link" target="_blank">GitHub</a>
         </div>
     </nav>
@@ -23,13 +21,13 @@
         <div class="panel-main">
             <div class="panel-main__inner panel-inverted">
                 <div class="panel-main__content">
-                    <div class="ih-item circle effect right_to_left">            
+                    <div class="ih-item circle effect right_to_left">
                         <a href="#" title="" class="blog-button">
                             <div class="img"><img src="assets/img/avatar.jpg" alt="img" class="js-avatar iUp profilepic"></div>
                             <div class="info iUp">
                                 <div class="info-back">
                                     <h2>Be Brave</h2>
-                                    <p>2025 · 勇敢</p>
+                                    <p>2026 · 勇敢</p>
                                 </div>
                             </div>
                         </a>
@@ -37,20 +35,46 @@
                     <h1 class="panel-cover__title panel-title iUp">
                         <a href="#" title="Chime Stone Home">Chime Stone</a>
                     </h1>
-                    <p class="panel-cover__subtitle panel-subtitle iUp">practice makes perfect</p>
+                    <p id="subtitle" class="panel-cover__subtitle panel-subtitle iUp" data-text="practice makes perfect">practice makes perfect</p>
                     <hr class="panel-cover__divider iUp" />
-                    <p id="description" class="panel-cover__description iUp">钟磬昼不响，空山自泠泠
+
+                    <!-- 社交图标 -->
+                    <div class="social-icons iUp">
+                        <a href="https://github.com/chimestone/" class="social-icon" target="_blank" title="GitHub">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                            </svg>
+                        </a>
+                        <a href="mailto:chimestone@example.com" class="social-icon" title="Email">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                            </svg>
+                        </a>
+                    </div>
+
+                    <hr class="panel-cover__divider iUp" />
+
+                    <p id="description" class="panel-cover__description iUp">
+                        钟磬昼不响，空山自泠泠
                         <br/>
                         <strong>- 张元凯</strong>
                     </p>
+                    <!-- 一言刷新按钮 -->
+                    <div class="iUp" style="margin-top: 8px;">
+                        <button class="hitokoto-refresh" title="换一句">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                                <path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                            </svg>
+                        </button>
+                    </div>
 
                 </div>
             </div>
             <div class="panel-cover--overlay cover-slate"></div>
         </div>
         <div class="remark iUp">
-            <p class="power">Powered By 
-                <a href="https://github.com/features/actions" target="_blank"> GitHub Actions </a> And 
+            <p class="power">Powered By
+                <a href="https://github.com/features/actions" target="_blank"> GitHub Actions </a> And
                 <a href="https://hitokoto.cn/" target="_blank"> Hitokoto </a>
             </p>
         </div>
