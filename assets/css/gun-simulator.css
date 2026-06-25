@@ -1,0 +1,808 @@
+/* ========================================
+   骗子酒馆 · 开枪模拟器 — 西部酒馆暗黑风
+   ======================================== */
+
+/* ---- CSS 变量 ---- */
+:root {
+    --gs-bg: #1a0f07;
+    --gs-bg-card: rgba(30, 15, 8, 0.92);
+    --gs-gold: #c9a050;
+    --gs-gold-dim: #8b6a30;
+    --gs-red: #c0392b;
+    --gs-red-bright: #e74c3c;
+    --gs-green: #27ae60;
+    --gs-text: #d4c5b2;
+    --gs-text-dim: #8a7a6a;
+    --gs-border: rgba(201, 160, 80, 0.3);
+    --gs-danger-bar: #e74c3c;
+    --gs-safe-bar: #5a7a9a;
+}
+
+/* ---- 基础 ---- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", sans-serif;
+    background: var(--gs-bg);
+    background-image:
+        radial-gradient(ellipse at 50% 30%, rgba(201, 160, 80, 0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 80%, rgba(180, 60, 40, 0.06) 0%, transparent 50%);
+    color: var(--gs-text);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* ---- 导航栏 ---- */
+.gs-nav {
+    display: flex;
+    align-items: center;
+    padding: 12px 24px;
+    background: rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid rgba(201, 160, 80, 0.15);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.gs-nav-link {
+    color: var(--gs-text-dim);
+    text-decoration: none;
+    font-size: 0.85em;
+    transition: color 0.2s;
+}
+
+.gs-nav-link:hover {
+    color: var(--gs-gold);
+}
+
+.gs-nav-title {
+    flex: 1;
+    text-align: center;
+    color: var(--gs-gold);
+    font-weight: bold;
+    font-size: 0.95em;
+    letter-spacing: 1px;
+}
+
+.gs-nav-spacer {
+    width: 80px; /* 与返回链接宽度对称 */
+}
+
+/* ---- 页面切换 ---- */
+.screen {
+    display: none;
+    min-height: 100vh;
+}
+
+.screen.active {
+    display: flex;
+}
+
+/* ========================================
+   设置页
+   ======================================== */
+
+#setup-screen {
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.setup-card {
+    background: var(--gs-bg-card);
+    border: 1px solid var(--gs-border);
+    border-radius: 16px;
+    padding: 40px 36px;
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.setup-title {
+    font-size: 1.8em;
+    color: var(--gs-gold);
+    margin-bottom: 6px;
+    letter-spacing: 2px;
+}
+
+.setup-desc {
+    color: var(--gs-text-dim);
+    font-size: 0.9em;
+    margin-bottom: 30px;
+}
+
+.setup-section {
+    margin-bottom: 24px;
+    text-align: left;
+}
+
+.setup-label {
+    display: block;
+    font-size: 0.85em;
+    color: var(--gs-gold-dim);
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* 人数选择器 */
+.player-count-selector {
+    display: flex;
+    gap: 8px;
+}
+
+.count-btn {
+    flex: 1;
+    padding: 10px 0;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: var(--gs-text-dim);
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.count-btn:hover {
+    border-color: var(--gs-gold-dim);
+    color: var(--gs-text);
+}
+
+.count-btn.active {
+    background: rgba(201, 160, 80, 0.15);
+    border-color: var(--gs-gold);
+    color: var(--gs-gold);
+}
+
+/* 名字输入 */
+.name-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.name-input-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.name-input-row .player-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1em;
+    font-weight: bold;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.name-input-row input {
+    flex: 1;
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: var(--gs-text);
+    font-size: 0.95em;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.name-input-row input:focus {
+    border-color: var(--gs-gold);
+}
+
+/* 按钮 */
+.btn {
+    padding: 14px 32px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1em;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 1px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #8b3a2a, #a04030);
+    color: #fff;
+    width: 100%;
+    margin-top: 10px;
+    font-size: 1.05em;
+    box-shadow: 0 4px 15px rgba(180, 50, 30, 0.3);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #a04030, #b85040);
+    box-shadow: 0 6px 20px rgba(180, 50, 30, 0.45);
+    transform: translateY(-1px);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+/* ========================================
+   游戏页
+   ======================================== */
+
+#game-screen {
+    flex-direction: column;
+}
+
+/* 游戏主体 */
+.game-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    gap: 24px;
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* ---- 玩家区域 ---- */
+.players-area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    justify-content: center;
+    width: 100%;
+}
+
+.player-card {
+    background: var(--gs-bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 16px 20px;
+    min-width: 130px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+    user-select: none;
+}
+
+.player-card:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.player-card.selected {
+    border-color: var(--gs-gold);
+    box-shadow: 0 0 20px rgba(201, 160, 80, 0.2);
+    background: rgba(201, 160, 80, 0.08);
+}
+
+.player-card.dead {
+    opacity: 0.45;
+    cursor: not-allowed;
+    border-color: rgba(255, 255, 255, 0.03);
+    filter: grayscale(0.6);
+}
+
+.player-card.dead:hover {
+    transform: none;
+    border-color: rgba(255, 255, 255, 0.03);
+}
+
+.player-card .card-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    margin: 0 auto 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #fff;
+}
+
+.player-card.dead .card-avatar {
+    filter: grayscale(0.8);
+}
+
+.player-card .card-name {
+    font-weight: bold;
+    font-size: 0.95em;
+    color: var(--gs-text);
+    margin-bottom: 4px;
+}
+
+.player-card.dead .card-name {
+    color: var(--gs-text-dim);
+    text-decoration: line-through;
+}
+
+.player-card .card-status {
+    font-size: 0.75em;
+    margin-bottom: 8px;
+}
+
+.player-card .card-status.alive {
+    color: var(--gs-green);
+}
+
+.player-card .card-status.dead-label {
+    color: var(--gs-red);
+}
+
+/* 弹巢指示器 */
+.chamber-indicator {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+    margin-bottom: 6px;
+}
+
+.chamber-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s;
+}
+
+.chamber-dot.spent {
+    background: rgba(0, 0, 0, 0.4);
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+.chamber-dot.current {
+    border-color: var(--gs-gold);
+    box-shadow: 0 0 6px rgba(201, 160, 80, 0.5);
+    animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+    0%, 100% { box-shadow: 0 0 4px rgba(201, 160, 80, 0.3); }
+    50% { box-shadow: 0 0 10px rgba(201, 160, 80, 0.7); }
+}
+
+.danger-bar {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.danger-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.4s, background 0.4s;
+    background: var(--gs-safe-bar);
+}
+
+.danger-bar-fill.medium {
+    background: #d4a030;
+}
+
+.danger-bar-fill.high {
+    background: var(--gs-danger-bar);
+}
+
+/* ---- 中央开枪区 ---- */
+.shooting-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.revolver-container {
+    position: relative;
+    width: 200px;
+    height: 160px;
+}
+
+/* 左轮手枪 SVG */
+.revolver {
+    width: 200px;
+    height: 160px;
+    transition: transform 0.1s;
+}
+
+.revolver.recoil {
+    animation: recoil 0.15s ease-out;
+}
+
+@keyframes recoil {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    30% { transform: translate(-8px, -5px) rotate(-5deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+/* 弹巢旋转 */
+.rev-cylinder-group {
+    transform-origin: 75px 87px;
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1.2);
+}
+
+.rev-cylinder-group.spinning {
+    animation: cylinder-spin 0.3s ease-in-out;
+}
+
+@keyframes cylinder-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(60deg); }
+}
+
+/* 击锤动画 */
+.rev-hammer {
+    transform-origin: 50px 38px;
+    transition: transform 0.2s ease-in;
+}
+
+.rev-hammer.cocked {
+    transform: rotate(-20deg);
+}
+
+/* 枪口火光 */
+.muzzle-flash {
+    position: absolute;
+    top: 58px;
+    left: 175px;
+    width: 40px;
+    height: 30px;
+    background: radial-gradient(ellipse, #ff6a00, #ff3a00, transparent);
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+    filter: blur(2px);
+}
+
+.muzzle-flash.fire {
+    animation: flash 0.2s ease-out;
+}
+
+@keyframes flash {
+    0% { opacity: 1; transform: scale(1.5); }
+    100% { opacity: 0; transform: scale(0.3); }
+}
+
+/* 开枪按钮 */
+.btn-shoot {
+    padding: 16px 48px;
+    background: linear-gradient(135deg, #6b2a1a, #8b3a2a);
+    color: #fff;
+    font-size: 1.2em;
+    font-weight: bold;
+    letter-spacing: 3px;
+    border: 1px solid rgba(201, 160, 80, 0.3);
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.btn-shoot:hover:not(:disabled) {
+    background: linear-gradient(135deg, #8b3a2a, #a04030);
+    box-shadow: 0 6px 25px rgba(180, 50, 30, 0.4);
+    transform: translateY(-2px);
+}
+
+.btn-shoot:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    filter: grayscale(0.4);
+}
+
+.shoot-hint {
+    color: var(--gs-text-dim);
+    font-size: 0.85em;
+}
+
+/* ---- 开枪记录 ---- */
+.history-panel {
+    width: 100%;
+    max-width: 500px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 14px 18px;
+}
+
+.history-title {
+    font-size: 0.85em;
+    color: var(--gs-text-dim);
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+.history-list {
+    max-height: 160px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.history-empty {
+    color: var(--gs-text-dim);
+    font-size: 0.8em;
+    text-align: center;
+    padding: 10px 0;
+}
+
+.history-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85em;
+    padding: 6px 10px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 6px;
+    animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.history-item .hi-player {
+    font-weight: bold;
+    min-width: 50px;
+}
+
+.history-item .hi-result {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.history-item .hi-result.empty {
+    background: rgba(90, 122, 154, 0.2);
+    color: #7aaccc;
+}
+
+.history-item .hi-result.live {
+    background: rgba(192, 57, 43, 0.25);
+    color: #e74c3c;
+}
+
+.history-item .hi-chance {
+    color: var(--gs-text-dim);
+    font-size: 0.75em;
+}
+
+/* ---- 结果弹窗 ---- */
+.shot-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(4px);
+}
+
+.shot-overlay.active {
+    display: flex;
+}
+
+.shot-result-card {
+    background: var(--gs-bg-card);
+    border: 1px solid var(--gs-border);
+    border-radius: 16px;
+    padding: 36px 40px;
+    text-align: center;
+    max-width: 380px;
+    width: 90%;
+    animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes popIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.shot-result-icon {
+    font-size: 4em;
+    margin-bottom: 10px;
+}
+
+.shot-result-text {
+    font-size: 1.6em;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+}
+
+.shot-result-text.safe {
+    color: var(--gs-green);
+}
+
+.shot-result-text.danger {
+    color: var(--gs-red-bright);
+}
+
+.shot-result-detail {
+    color: var(--gs-text-dim);
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+/* 血溅效果 */
+.blood-splatter {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1999;
+    opacity: 0;
+}
+
+.blood-splatter.active {
+    animation: bloodFade 0.8s ease-out forwards;
+}
+
+@keyframes bloodFade {
+    0% { opacity: 0.8; }
+    100% { opacity: 0; }
+}
+
+.blood-drop {
+    position: absolute;
+    background: radial-gradient(circle, #8b0000, #5a0000);
+    border-radius: 50%;
+    animation: dropFall 0.8s ease-out forwards;
+}
+
+@keyframes dropFall {
+    0% { transform: translateY(-20px) scale(1); opacity: 1; }
+    100% { transform: translateY(40px) scale(0.3); opacity: 0; }
+}
+
+/* ========================================
+   结算页
+   ======================================== */
+
+#result-screen {
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.result-card {
+    background: var(--gs-bg-card);
+    border: 1px solid var(--gs-border);
+    border-radius: 16px;
+    padding: 40px 36px;
+    max-width: 440px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+    animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.result-trophy {
+    font-size: 4em;
+    margin-bottom: 8px;
+}
+
+.result-title {
+    color: var(--gs-gold);
+    font-size: 1.4em;
+    margin-bottom: 6px;
+    letter-spacing: 2px;
+}
+
+.result-winner {
+    color: #fff;
+    font-size: 2em;
+    margin-bottom: 24px;
+}
+
+.result-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 24px;
+    text-align: left;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+}
+
+.stat-row .stat-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gs-text);
+}
+
+.stat-row .stat-value {
+    color: var(--gs-gold);
+    font-weight: bold;
+}
+
+.stat-row.dead-row .stat-name {
+    color: var(--gs-text-dim);
+}
+
+.stat-row.dead-row .stat-value {
+    color: var(--gs-red);
+}
+
+.stat-row .stat-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7em;
+    color: #fff;
+}
+
+/* ---- 响应式 ---- */
+@media (max-width: 768px) {
+    .gs-nav {
+        padding: 10px 14px;
+    }
+
+    .gs-nav-title {
+        font-size: 0.8em;
+    }
+
+    .gs-nav-spacer {
+        width: 60px;
+    }
+
+    .setup-card {
+        padding: 28px 20px;
+    }
+
+    .setup-title {
+        font-size: 1.4em;
+    }
+
+    .player-card {
+        min-width: 100px;
+        padding: 12px 14px;
+    }
+
+    .game-body {
+        padding: 14px;
+        gap: 16px;
+    }
+
+    .btn-shoot {
+        padding: 14px 36px;
+        font-size: 1em;
+    }
+
+    .result-card {
+        padding: 28px 20px;
+    }
+
+    .result-winner {
+        font-size: 1.5em;
+    }
+}

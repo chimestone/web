@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开枪模拟器 - 骗子酒馆</title>
+    <link rel="stylesheet" href="assets/css/gun-simulator.css">
+</head>
+<body>
+
+<!-- 导航栏 -->
+<nav class="gs-nav">
+    <a href="index.html" class="gs-nav-link">← 返回首页</a>
+    <span class="gs-nav-title">骗子酒馆 · 开枪模拟器</span>
+    <span class="gs-nav-spacer"></span>
+</nav>
+
+<!-- ===== 设置页 ===== -->
+<div id="setup-screen" class="screen active">
+    <div class="setup-card">
+        <h1 class="setup-title">🔫 骗子酒馆 · 开枪模拟器</h1>
+        <p class="setup-desc">线下吹牛，线上开枪。为每位玩家装填一把独立左轮。</p>
+
+        <div class="setup-section">
+            <label class="setup-label">玩家人数</label>
+            <div class="player-count-selector">
+                <button class="count-btn" data-count="2">2 人</button>
+                <button class="count-btn active" data-count="3">3 人</button>
+                <button class="count-btn" data-count="4">4 人</button>
+                <button class="count-btn" data-count="5">5 人</button>
+                <button class="count-btn" data-count="6">6 人</button>
+            </div>
+        </div>
+
+        <div class="setup-section">
+            <label class="setup-label">玩家名字</label>
+            <div id="name-inputs" class="name-inputs">
+                <!-- JS动态生成 -->
+            </div>
+        </div>
+
+        <button id="btn-start" class="btn btn-primary">🔫 装填左轮，开始游戏</button>
+    </div>
+</div>
+
+<!-- ===== 游戏页 ===== -->
+<div id="game-screen" class="screen">
+    <!-- 主体 -->
+    <div class="game-body">
+        <!-- 玩家区域 -->
+        <div class="players-area" id="players-area">
+            <!-- JS动态生成 -->
+        </div>
+
+        <!-- 中央开枪区 -->
+        <div class="shooting-area" id="shooting-area">
+            <div class="revolver-container" id="revolver-container">
+                <!-- 左轮手枪 SVG -->
+                <svg class="revolver" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 枪管 -->
+                    <rect class="rev-barrel" x="80" y="68" width="110" height="14" rx="3" fill="#5a5a5a" stroke="#3a3a3a" stroke-width="1.5"/>
+                    <rect class="rev-barrel-top" x="85" y="62" width="95" height="6" rx="2" fill="#4a4a4a"/>
+                    <!-- 枪身框架 -->
+                    <rect class="rev-frame" x="55" y="55" width="40" height="55" rx="5" fill="#555" stroke="#333" stroke-width="1.5"/>
+                    <!-- 弹巢 -->
+                    <g class="rev-cylinder-group">
+                        <rect class="rev-cylinder" x="58" y="72" width="34" height="30" rx="8" fill="#666" stroke="#444" stroke-width="1.5"/>
+                        <!-- 弹巢孔 - 可见3个 -->
+                        <circle class="chamber-hole hole-1" cx="67" cy="87" r="4" fill="#444"/>
+                        <circle class="chamber-hole hole-2" cx="77" cy="87" r="4" fill="#444"/>
+                        <circle class="chamber-hole hole-3" cx="87" cy="87" r="4" fill="#444"/>
+                    </g>
+                    <!-- 击锤 -->
+                    <path class="rev-hammer" d="M55 55 L45 40 L50 38 L58 52" fill="#666" stroke="#444" stroke-width="1.5"/>
+                    <!-- 握把 -->
+                    <path class="rev-grip" d="M60 108 L55 150 L95 150 L90 108 Z" fill="#5a4030" stroke="#3a2a1a" stroke-width="1.5"/>
+                    <line x1="72" y1="108" x2="72" y2="150" stroke="#4a3020" stroke-width="1"/>
+                    <!-- 扳机护圈 -->
+                    <path class="rev-trigger-guard" d="M70 100 Q70 118 80 118 Q90 118 90 105" fill="none" stroke="#555" stroke-width="2"/>
+                    <!-- 扳机 -->
+                    <path class="rev-trigger" d="M78 102 L78 114 Q78 116 80 116" fill="none" stroke="#777" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
+                <!-- 枪口火光 -->
+                <div class="muzzle-flash" id="muzzle-flash"></div>
+            </div>
+
+            <button id="btn-shoot" class="btn btn-shoot" disabled>选择玩家后开枪</button>
+            <p class="shoot-hint" id="shoot-hint">👆 先选择要开枪的玩家</p>
+        </div>
+
+        <!-- 开枪记录 -->
+        <div class="history-panel" id="history-panel">
+            <h3 class="history-title">📋 开枪记录</h3>
+            <div class="history-list" id="history-list">
+                <p class="history-empty">还没有人开过枪</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 结果弹窗 -->
+    <div class="shot-overlay" id="shot-overlay">
+        <div class="shot-result-card" id="shot-result-card">
+            <div class="shot-result-icon" id="shot-result-icon"></div>
+            <h2 class="shot-result-text" id="shot-result-text"></h2>
+            <p class="shot-result-detail" id="shot-result-detail"></p>
+            <button class="btn btn-primary" id="btn-continue">继续</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== 结算页 ===== -->
+<div id="result-screen" class="screen">
+    <div class="result-card">
+        <div class="result-trophy">🏆</div>
+        <h1 class="result-title" id="result-title">胜者诞生！</h1>
+        <h2 class="result-winner" id="result-winner"></h2>
+        <div class="result-stats" id="result-stats">
+            <!-- JS动态生成 -->
+        </div>
+        <button class="btn btn-primary" id="btn-replay">🔫 再来一局</button>
+    </div>
+</div>
+
+<script src="assets/js/gun-simulator.js"></script>
+</body>
+</html>
